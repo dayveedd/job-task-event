@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class InwardCurvedClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    const curveHeight = 30.0;
+    const curveHeight = 40.0;
     final path = Path();
 
     path.moveTo(0, 0);
