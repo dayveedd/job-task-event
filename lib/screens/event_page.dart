@@ -41,7 +41,6 @@ class _EventPageState extends State<EventPage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return ChangeNotifierProvider(
       create: (_) {
         // creating an instance of the dio
@@ -102,9 +101,7 @@ class _EventPageState extends State<EventPage> {
                         ClipPath(
                           clipper: InwardCurvedClipper(),
                           child: SizedBox(
-                            height: width > 400
-                                ? MediaQuery.of(context).size.height * 0.4
-                                : MediaQuery.of(context).size.height * 0.385,
+                            height: MediaQuery.of(context).size.height * 0.382,
                             child: ListView.builder(
                               controller: _scrollController,
                               itemCount: provider.events.length,
@@ -179,8 +176,7 @@ class _EventPageState extends State<EventPage> {
                                         child: Container(
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            color:
-                                                Colors.black.withOpacity(0.7),
+                                            color: Color(0xFF363636),
                                           ),
                                           child: Column(
                                             crossAxisAlignment:
