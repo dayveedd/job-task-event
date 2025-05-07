@@ -41,6 +41,7 @@ class _EventPageState extends State<EventPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return ChangeNotifierProvider(
       create: (_) {
         // creating an instance of the dio
@@ -98,171 +99,164 @@ class _EventPageState extends State<EventPage> {
                         SizedBox(
                           height: 25,
                         ),
-                        RefreshIndicator(
-                          onRefresh: () async {
-                            provider.fetchEvents();
-                          },
-                          child: ClipPath(
-                            clipper: InwardCurvedClipper(),
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.40,
-                              child: ListView.builder(
-                                controller: _scrollController,
-                                itemCount: provider.events.length,
-                                scrollDirection: Axis.horizontal,
-                                physics: BouncingScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  final event = provider.events[index];
-                                  final image =
-                                      eventImage[index % eventImage.length];
-                                  return Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          height: 206,
-                                          width: 340,
-                                          // margin: EdgeInsets.symmetric(
-                                          //   vertical: 10,
-                                          // ),
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: AssetImage(image),
-                                              fit: BoxFit.cover,
-                                            ),
+                        ClipPath(
+                          clipper: InwardCurvedClipper(),
+                          child: SizedBox(
+                            height: width > 400
+                                ? MediaQuery.of(context).size.height * 0.4
+                                : MediaQuery.of(context).size.height * 0.385,
+                            child: ListView.builder(
+                              controller: _scrollController,
+                              itemCount: provider.events.length,
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                final event = provider.events[index];
+                                final image =
+                                    eventImage[index % eventImage.length];
+                                return Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: 206,
+                                        width: 340,
+                                        // margin: EdgeInsets.symmetric(
+                                        //   vertical: 10,
+                                        // ),
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(image),
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
-                                        // price tag
-                                        Positioned(
-                                          top: 12,
-                                          left: 12,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 16.0,
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                  sigmaX: 10,
-                                                  sigmaY: 10,
+                                      ),
+                                      // price tag
+                                      Positioned(
+                                        top: 12,
+                                        left: 12,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 16.0,
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: BackdropFilter(
+                                              filter: ImageFilter.blur(
+                                                sigmaX: 10,
+                                                sigmaY: 10,
+                                              ),
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 6,
                                                 ),
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 6,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white
-                                                        .withOpacity(0.3),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Text(
-                                                    '\$${event.eventPrice}',
-                                                    style: GoogleFonts.poppins(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: Colors.white,
-                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white
+                                                      .withOpacity(0.3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Text(
+                                                  '\$${event.eventPrice}',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                        // Event info
-                                        Positioned(
-                                          bottom: 0,
-                                          left: 0,
-                                          right: 0,
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  Colors.black.withOpacity(0.7),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  event.eventName,
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 7,
-                                                ),
-                                                Text(
-                                                  event.eventSubtitle,
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 7,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      'images/svg/Calendar_duotone_line.svg',
-                                                    ),
-                                                    SizedBox(
-                                                      width: 6,
-                                                    ),
-                                                    Text(
-                                                      event.eventDate,
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    SvgPicture.asset(
-                                                        'images/svg/Time.svg'),
-                                                    SizedBox(
-                                                      width: 6,
-                                                    ),
-                                                    Text(
-                                                      event.eventTime,
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                              ],
-                                            ),
+                                      ),
+                                      // Event info
+                                      Positioned(
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        child: Container(
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.7),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                event.eventName,
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 7,
+                                              ),
+                                              Text(
+                                                event.eventSubtitle,
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 7,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    'images/svg/Calendar_duotone_line.svg',
+                                                  ),
+                                                  SizedBox(
+                                                    width: 6,
+                                                  ),
+                                                  Text(
+                                                    event.eventDate,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  SvgPicture.asset(
+                                                      'images/svg/Time.svg'),
+                                                  SizedBox(
+                                                    width: 6,
+                                                  ),
+                                                  Text(
+                                                    event.eventTime,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -323,6 +317,27 @@ class _EventPageState extends State<EventPage> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                provider.fetchEvents();
+                              },
+                              child: Text(
+                                'Refresh',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
